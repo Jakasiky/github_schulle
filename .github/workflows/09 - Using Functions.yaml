@@ -8,6 +8,8 @@ jobs:
     echo1:
         runs-on: ubuntu-latest
         steps:
+            - name : Sleep for 20 seconds
+              run: sleep 20
             - name: Faling step
               run: |
                 echo "This step will fail"
