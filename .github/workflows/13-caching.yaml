@@ -31,7 +31,15 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.node-version }}
+      - name: Download dependencies
+        uses: actions/cache@v3
+        if: ${{ inputs.use-cache }}
+        id: cache-dependencies
+        with:
+          key: deps-node-modules-${{ hashFiles('13-caching/package-lock.json') }}
+          path: 13-caching/node_modules
       - name: Install dependencies
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: npm ci
       - name: Unit testing
         run: npm test
