@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: 14-artifacts
+        working-directory: 14-artifacts/react-app
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
@@ -21,15 +21,15 @@ jobs:
         uses: actions/cache@v3
         id: cache-dependencies
         with:
-          key: deps-node-modules-${{ hashFiles('14-artifacts/package-lock.json') }}
-          path: 13-caching/node_modules
+          key: deps-node-modules-${{ hashFiles('14-artifacts/react-app/package-lock.json') }}
+          path: 14-artifacts/react-app/node_modules
 
       - name: Install dependencies
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: npm ci
 
       - name: Unit Testing
-        run: npm run test
+        run: npm run test -- --coverage
 
       - name: Build code
         run: npm run build
