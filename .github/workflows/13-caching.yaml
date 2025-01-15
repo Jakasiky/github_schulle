@@ -36,6 +36,7 @@ jobs:
       - name: Calculate cache key
         id: cache-key
         run: echo "CACHE_KEY=deps-node-modules-${{ hashFiles('13-caching/package-lock.json') }}" >> "$GITHUB_OUTPUT"
+
       - name: Download cache dependencies
         uses: actions/cache@v3
         if: ${{ inputs.use-cache }}
@@ -43,9 +44,12 @@ jobs:
         with:
           key: ${{ steps.cache-key.outputs.CACHE_KEY }}
           path: 13-caching/node_modules
+          
       - name: Install dependencies
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: npm ci
+      - name: Check the cache content
+        run: ls -la ~/.npm
   lint-test-build:
     runs-on: ubuntu-latest
     needs: install-deps
@@ -56,10 +60,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.node-version }}
+
       - name: Download dependencies
         uses: actions/cache@v3
         if: ${{ inputs.use-cache }}

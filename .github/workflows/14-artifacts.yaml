@@ -33,6 +33,7 @@ jobs:
 
       - name: Build code
         run: npm run build
+        
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -48,5 +49,5 @@ jobs:
           name: app
           path: 14-artifacts/dist
 
-      - name: Show folder content
+      - name: Show folder structure
         run: ls -R
